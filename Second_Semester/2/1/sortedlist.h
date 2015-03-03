@@ -3,12 +3,6 @@
 
 class SortedList : public List
 {
-    struct Node
-    {
-        Node *next;
-        int value;
-        Node(Node *nxt, int val);
-    } *first;
 public:
     SortedList();
     ~SortedList();
@@ -18,4 +12,11 @@ public:
     bool exists(int value);
     bool isEmpty();
     void print();
+private:
+    struct Node
+    {
+        Node *next;
+        int value;
+        Node(Node *nxt, int val);
+    } *first;
 };

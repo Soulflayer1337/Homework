@@ -3,7 +3,7 @@
 class List
 {
 public:
-    virtual ~List() {};
+    virtual ~List() {}
     void virtual add(int value) = 0;
     bool virtual remove(int value) = 0;
     void virtual removeAll(int value) = 0;

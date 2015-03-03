@@ -3,13 +3,6 @@
 
 class DoubleLinkedList : public List
 {
-    struct Node
-    {
-        Node *next;
-        Node *last;
-        int value;
-        Node(Node *lst, int val);
-    } *front, *back;
 public:
     DoubleLinkedList();
     ~DoubleLinkedList();
@@ -19,4 +12,14 @@ public:
     bool exists(int value);
     bool isEmpty();
     void print();
+private:
+    struct Node
+    {
+        Node *next;
+        Node *last;
+        int value;
+        Node(Node *lst, int val);
+    };
+    Node *front;
+    Node *back;
 };

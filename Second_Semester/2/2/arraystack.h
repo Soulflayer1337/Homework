@@ -3,9 +3,6 @@
 
 class ArrayStack : public Stack
 {
-    int capacity;
-    int size;
-    int *array;
 public:
     ArrayStack();
     ~ArrayStack();
@@ -13,4 +10,8 @@ public:
     int pop();
     int top();
     bool isEmpty() const;
+private:
+    int capacity;
+    int size;
+    int *array;
 };
