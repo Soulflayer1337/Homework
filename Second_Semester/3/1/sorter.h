@@ -5,11 +5,6 @@
  */
 class Sorter
 {
-protected:
-    /**
-     * @brief swap - swaps two elements.
-     */
-    void swap(int &first, int &second);
 public:
     /**
      * @brief sort - Virtual function which sorts the array
@@ -17,4 +12,9 @@ public:
      * @param size - The size of the array
      */
     virtual void sort(int *array, int size) = 0;
+protected:
+    /**
+     * @brief swap - swaps two elements.
+     */
+    void swap(int &first, int &second);
 };
