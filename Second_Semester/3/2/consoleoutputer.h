@@ -7,5 +7,5 @@
 class ConsoleOutputer : public Outputer
 {
 public:
-    void output(int **matrix, int size);
+    void output(Matrix *matrix, int size);
 };

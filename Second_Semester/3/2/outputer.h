@@ -1,4 +1,5 @@
 #pragma once
+#include "matrix.h"
 
 /**
  * @brief The Outputer class - Abstract type for spiral output
@@ -11,7 +12,7 @@ public:
      * @param matrix - Matrix for output
      * @param size - Width of the matrix
      */
-    virtual void output(int **matrix, int size) = 0;
+    virtual void output(Matrix *matrix, int size) = 0;
 protected:
     /**
      * @brief makeOutputArray - Creates an output array
@@ -19,5 +20,5 @@ protected:
      * @param size - Width of the matrix
      * @return - Returns the array of the elements of the spiral
      */
-    int *makeOutputArray(int **matrix, int size);
+    int *makeOutputArray(Matrix *matrix, int size);
 };

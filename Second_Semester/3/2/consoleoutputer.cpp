@@ -1,7 +1,7 @@
 #include <iostream>
 #include "consoleoutputer.h"
 
-void ConsoleOutputer::output(int **matrix, int size)
+void ConsoleOutputer::output(Matrix *matrix, int size)
 {
     int *array = makeOutputArray(matrix, size);
     int length = size * size;

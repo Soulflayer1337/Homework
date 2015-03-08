@@ -33,22 +33,12 @@ int main()
     int size = 0;
     std::cin >> size;
     std::cout << "Enter the matrix: ";
-    int **matrix = new int*[size];
-
-    for (int i = 0; i < size; i++)
-    {
-        matrix[i] = new int[size];
-
-        for (int j = 0; j < size; j++)
-            std::cin >> matrix[i][j];
-    }
+    Matrix *matrix = new Matrix(size);
+    matrix->readMatrix();
 
     outputer->output(matrix, size);
 
-    for (int i = 0; i < size; i++)
-        delete[] matrix[i];
-
-    delete[] matrix;
+    delete matrix;
     delete outputer;
     return 0;
 }

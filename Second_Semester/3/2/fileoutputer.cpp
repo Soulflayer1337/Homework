@@ -2,7 +2,7 @@
 #include <iostream>
 #include "fileoutputer.h"
 
-void FileOutputer::output(int **matrix, int size)
+void FileOutputer::output(Matrix *matrix, int size)
 {
     std::ofstream out("output.txt");
 
