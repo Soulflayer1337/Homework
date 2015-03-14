@@ -62,6 +62,7 @@ int main()
     delete first;
     delete second;
     delete third;
+    delete forth;
     delete sortedSet;
     return 0;
 }
