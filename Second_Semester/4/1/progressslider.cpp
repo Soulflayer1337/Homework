@@ -1,19 +1,19 @@
 #include "progressslider.h"
 #include "ui_progressslider.h"
 
-progressSlider::progressSlider(QWidget *parent) :
+ProgressSlider::ProgressSlider(QWidget *parent) :
     QWidget(parent),
-    ui(new Ui::progressSlider)
+    ui(new Ui::ProgressSlider)
 {
     ui->setupUi(this);
 }
 
-progressSlider::~progressSlider()
+ProgressSlider::~ProgressSlider()
 {
     delete ui;
 }
 
-void progressSlider::on_slider_valueChanged(int value)
+void ProgressSlider::on_slider_valueChanged(int value)
 {
     ui->progressBar->setValue(value);
 }

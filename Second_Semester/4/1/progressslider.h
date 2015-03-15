@@ -4,22 +4,22 @@
 #include <QWidget>
 
 namespace Ui {
-class progressSlider;
+class ProgressSlider;
 }
 
-class progressSlider : public QWidget
+class ProgressSlider : public QWidget
 {
     Q_OBJECT
 
 public:
-    explicit progressSlider(QWidget *parent = 0);
-    ~progressSlider();
+    explicit ProgressSlider(QWidget *parent = 0);
+    ~ProgressSlider();
 
 private slots:
     void on_slider_valueChanged(int value);
 
 private:
-    Ui::progressSlider *ui;
+    Ui::ProgressSlider *ui;
 };
 
 #endif // PROGRESSSLIDER_H
