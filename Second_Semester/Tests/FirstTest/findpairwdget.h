@@ -24,8 +24,8 @@ public slots:
 
 private:
     unsigned int size;
-    QPushButton *optionsButton;
-    QPushButton *pushedButton;
+    int lastIndex;
+    int prelastIndex;
     QPushButton *buttons;
     QGridLayout *gridLayout;
     QSignalMapper *signalMapper;

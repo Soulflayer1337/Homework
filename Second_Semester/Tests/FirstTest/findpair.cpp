@@ -31,14 +31,15 @@ FindPair::FindPair(unsigned int size) : matrix(new Matrix(size)) , numberOfPairs
         unsigned int left = rand() % size;
         unsigned int right = rand() % size;
 
-        matrix->element(left, right + (size % 2 && left == size / 2 && right == size / 2));
+        int &changeable = matrix->element(left, right + (size % 2 && left == size / 2 && right == size / 2));
+        changeable = !changeable;
         numberOfOne--;
     }
 
     numberOfPairs = (size * size) / 2;
 }
 
-short FindPair::numberIn(unsigned int row, unsigned int column)
+int FindPair::numberIn(unsigned int row, unsigned int column)
 {
     return (matrix->element(row, column));
 }

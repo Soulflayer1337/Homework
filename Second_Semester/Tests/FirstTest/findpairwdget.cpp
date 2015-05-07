@@ -4,8 +4,9 @@
 
 FindPairWdget::FindPairWdget(QWidget *parent) :
     QWidget(parent),
-    size(6),
-    pushedButton(nullptr),
+    size(2),
+    lastIndex(0),
+    prelastIndex(-1),
     buttons(nullptr),
     gridLayout(nullptr),
     signalMapper(nullptr),
@@ -17,17 +18,17 @@ FindPairWdget::FindPairWdget(QWidget *parent) :
     signalMapper = new QSignalMapper(this);
     gridLayout = new QGridLayout;
     buttons = new QPushButton[size * size];
+    findPair = new FindPair(size);
 
     for (unsigned int i = 0; i < size; i++)
         for (unsigned int j = 0; j < size; j++)
         {
             int index = i * size + j;
-            pushedButton = &buttons[index];
             buttons[index].setText("");
             buttons[index].setSizeIncrement(20, 20);
             connect(&buttons[index], SIGNAL(clicked()), signalMapper, SLOT(map()));
             signalMapper->setMapping(&buttons[index], index);
-            gridLayout->addWidget(&buttons[index], i % size, j % size);
+            gridLayout->addWidget(&buttons[index], i, j);
         }
 
     if (size % 2)
@@ -44,44 +45,43 @@ FindPairWdget::~FindPairWdget()
     delete gridLayout;
     delete signalMapper;
     delete findPair;
-    delete optionsButton;
 
     delete ui;
 }
 
 void FindPairWdget::clicked(const int index)
 {
-    buttons[index].setText(QString::number(findPair->numberIn(index / size, index % size)));
 
-    if (pushedButton)
+    if (lastIndex == -1)
     {
-        int indexFirst = 0;
+        buttons[index].setText(QString::number(findPair->numberIn(index / size, index % size)));
 
-        while (pushedButton == &buttons[indexFirst])
-            indexFirst++;
+        lastIndex = index;
 
-        short res = (findPair->check(indexFirst / size, indexFirst % size, index / size, index % size));
+        short res = (findPair->check(prelastIndex / size, prelastIndex % size, index / size, index % size));
 
         if (res == 0)
-        {
-            pushedButton->setText("");
-            buttons[index].setText("");
-            pushedButton->setEnabled(true);
-        }
+            buttons[prelastIndex].setEnabled(true);
         else
         {
             buttons[index].setEnabled(false);
 
             if (res == 2)
                 QMessageBox::information(this, "You've won!", "You've won!", QMessageBox::Ok);
-
         }
-
-        pushedButton = nullptr;
     }
     else
     {
-        pushedButton = &buttons[index];
+        if (prelastIndex != -1 && buttons[prelastIndex].isEnabled())
+        {
+            buttons[prelastIndex].setText("");
+            buttons[lastIndex].setText("");
+        }
+        lastIndex = -1;
+
+        prelastIndex = index;
         buttons[index].setEnabled(false);
+        buttons[index].setText(QString::number(findPair->numberIn(index / size, index % size)));
     }
+
 }
