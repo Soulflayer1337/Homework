@@ -29,36 +29,11 @@ IOperand *ExpressionParser::parse(std::istream &stream)
 
     IOperand *leftOperand = parse(stream);
     IOperand *rightOperand = parse(stream);
-    IOperand *returnValue = nullptr;
 
     ignoreSpaces(stream);
     stream.ignore();
 
-    switch (operation)
-    {
-    case '+':
-    {
-        returnValue = new AdditionOperator(leftOperand, rightOperand);
-        break;
-    }
-    case '-':
-    {
-        returnValue = new SubtractionOperator(leftOperand, rightOperand);
-        break;
-    }
-    case '*':
-    {
-        returnValue = new MultiplicationOperator(leftOperand, rightOperand);
-        break;
-    }
-    case '/':
-    {
-        returnValue = new DivisionOperator(leftOperand, rightOperand);
-        break;
-    }
-    }
-
-    return returnValue;
+    return newOperator(operation, leftOperand, rightOperand);
 }
 
 IOperand *ExpressionParser::parse(const std::string &expression)
@@ -86,10 +61,16 @@ IOperand *ExpressionParser::parse(const std::string &expression, int &index)
 
     IOperand *leftOperand = parse(expression, index);
     IOperand *rightOperand = parse(expression, index);
-    IOperand *returnValue = nullptr;
 
     ignoreSpaces(expression, index);
     index++;
+
+    return newOperator(operation, leftOperand, rightOperand);
+}
+
+IOperand *ExpressionParser::newOperator(char operation, IOperand *leftOperand, IOperand *rightOperand)
+{
+    IOperand *returnValue = nullptr;
 
     switch (operation)
     {

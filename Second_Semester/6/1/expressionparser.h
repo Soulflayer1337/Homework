@@ -17,6 +17,7 @@ public:
     static IOperand *parse(const std::string &expression);
     static IOperand *parse(const std::string &expression, int &index);
 private:
+    static IOperand *newOperator(char operation, IOperand *leftOperand, IOperand *rightOperand);
     static void ignoreSpaces(std::istream &stream);
     static void ignoreSpaces(const std::string &expression, int &index);
 };
