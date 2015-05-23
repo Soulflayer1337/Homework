@@ -98,13 +98,21 @@ void HashTable::rebuild()
 
     while (guard->next->next && changedNumber < rebuildNumber)
     {
+        if (pointer->next == current)
+        {
+            pointer = (current->next ? current : guard);
+            iterator = 0;
+        }
+
         unsigned int &numberOfElements = pointer->next->numberOfElements;
 
         while (changedNumber < rebuildNumber && numberOfElements)
         {
             while (!pointer->next->table[iterator].isEmpty() && changedNumber < rebuildNumber)
             {
-                add(pointer->next->table[iterator].pop());
+                current->numberOfElements++;
+                std::string obj = pointer->next->table[iterator].pop();
+                current->table[current->function->getHash(obj)].add(obj);
                 changedNumber++;
                 numberOfElements--;
             }
@@ -118,6 +126,8 @@ void HashTable::rebuild()
             changedNumber++;
             Node *toDelete = pointer->next;
             pointer->next = toDelete->next;
+
+            delete toDelete;
 
             if (!pointer->next)
                 pointer = guard;
