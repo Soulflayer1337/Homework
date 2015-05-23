@@ -62,6 +62,32 @@ private slots:
         QVERIFY(!hashTable->exists("blade"));
     }
 
+    void complexTest()
+    {
+        hashTable->add("sword");
+        hashTable->add("blade");
+        hashTable->add("razor");
+        hashTable->add("odachi");
+        hashTable->add("wakizashi");
+        hashTable->add("zweihander");
+        hashTable->add("morgenstern");
+
+        QVERIFY(!hashTable->exists("tachi"));
+        QVERIFY(hashTable->exists("odachi"));
+        QVERIFY(hashTable->exists("morgenstern"));
+
+        hashTable->changeFunction(new StringHash(32768));
+
+        hashTable->add("tachi");
+        hashTable->add("claymore");
+        hashTable->add("uchigatana");
+        hashTable->remove("morgenstern");
+
+        QVERIFY(!hashTable->exists("morgenstern"));
+        QVERIFY(hashTable->exists("tachi"));
+        QVERIFY(hashTable->exists("claymore"));
+    }
+    // I haven't got enough fantasy for more tests :(
 private:
     HashTable *hashTable;
 };

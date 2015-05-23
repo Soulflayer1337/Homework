@@ -89,6 +89,7 @@ void HashTable::changeFunction(IHashFunction *function)
         ptr->next = new Node(nullptr, function);
 
     current = ptr->next;
+    rebuild();
 }
 
 void HashTable::rebuild()
