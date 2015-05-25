@@ -42,13 +42,7 @@ SharedPointer<T>::SharedPointer(T *obj) : myObj(obj), numberOfCopies(nullptr)
 template <typename T>
 SharedPointer<T>::~SharedPointer()
 {
-    if (numberOfCopies)
-    {
-        (*numberOfCopies)--;
-
-        if (!*numberOfCopies)
-            delete myObj;
-    }
+    release();
 }
 
 template <typename T>
@@ -61,16 +55,7 @@ SharedPointer<T>::SharedPointer(const SharedPointer<T> &ptr) : myObj(ptr.myObj),
 template <typename T>
 SharedPointer<T> &SharedPointer<T>::operator=(const SharedPointer<T> &ptr)
 {
-    if (numberOfCopies)
-    {
-        (*numberOfCopies)--;
-
-        if (!*numberOfCopies)
-        {
-            delete numberOfCopies;
-            delete myObj;
-        }
-    }
+    release();
 
     numberOfCopies = ptr.numberOfCopies;
     myObj = ptr.myObj;
