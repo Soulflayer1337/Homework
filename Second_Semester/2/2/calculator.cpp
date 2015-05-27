@@ -1,5 +1,4 @@
 #include "calculator.h"
-#include <iostream>
 
 using std::cin;
 using std::cout;
@@ -28,14 +27,15 @@ Calculator::Calculator() : stack(nullptr)
 {
 }
 
-void Calculator::calculate()
+int Calculator::calculate(std::istream &stream, int &error)
 {
-    while (std::isspace(cin.peek()))
-        cin.ignore();
+    error = 0;
+    while (std::isspace(stream.peek()))
+        stream.ignore();
 
-    while (cin.peek() != '\n')
+    while (stream.peek() != '\n')
     {
-        char symbol = cin.get();
+        char symbol = stream.get();
 
         if (std::isspace(symbol))
             continue;
@@ -44,54 +44,55 @@ void Calculator::calculate()
         {
             if (stack->isEmpty())
             {
-                cout << "'" << symbol << "' can't be the first symbol!\n";
-                return;
+                error = 1;
+                return 0;
             }
 
             int first = stack->pop();
 
             if (stack->isEmpty())
             {
-                cout << "Incorrect expression!\n";
-                return;
+                error = 1;
+                return 0;
             }
 
             int second = stack->pop();
 
             if (symbol == '/' && first == 0)
             {
-                //cout << "D1V1D3D 8Y 23R0!\n";
-                cout << "|)1\/1|)3|) 8*/ 23|>0!\n";
-                return;
+                error = 2;
+                return 0;
             }
 
             stack->push(operation(symbol, second, first));
         }
         else if (std::isdigit(symbol))
         {
-            cin.unget();
+            stream.unget();
             int number = 0;
-            cin >> number;
+            stream >> number;
             stack->push(number);
         }
         else
         {
-            cout << "Unknown symbol: " << char(symbol) << std::endl;
-            return;
+            error = 1;
+            return 0;
         }
     }
 
+    int ans = 0;
+
     if (stack->isEmpty())
-        cout << "No expression!\n";
+        error = 3;
     else
     {
-        int ans = stack->pop();
+        ans = stack->pop();
 
         if (!stack->isEmpty())
-            cout << "Incorrect expression!\n";
-
-        cout << "Answer: " << ans << std::endl;
+            error = 1;
     }
+
+    return ans;
 }
 
 void Calculator::setStack(Stack *stack)
