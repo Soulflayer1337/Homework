@@ -51,6 +51,7 @@ ChatClient::ChatClient(QWidget *parent) :
     connect(tcpSocket, SIGNAL(connected()), this, SLOT(sessionOpened()));
     connect(tcpSocket, SIGNAL(disconnected()), this, SLOT(disconnected()));
     connect(connectionButton, SIGNAL(clicked()), this, SLOT(connectToServer()));
+    connect(sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
 
     ui->setupUi(this);
 }

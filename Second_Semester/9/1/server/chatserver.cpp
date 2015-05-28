@@ -5,7 +5,7 @@ ChatServer::ChatServer(QWidget *parent) :
     QWidget(parent),
     chatText(new QTextEdit),
     newMessageEdit(new QLineEdit),
-    sendButton(new QPushButton),
+    sendButton(new QPushButton("Send")),
     portLabel(new QLabel),
     tcpServer(nullptr),
     tcpSocket(nullptr),
@@ -25,9 +25,9 @@ ChatServer::ChatServer(QWidget *parent) :
 
     makeButtonEnabled();
     chatText->setReadOnly(true);
+    connect(newMessageEdit, SIGNAL(textChanged(QString)), this, SLOT(makeButtonEnabled()));
     connect(newMessageEdit, SIGNAL(returnPressed()), sendButton, SLOT(click()));
     connect(sendButton, SIGNAL(clicked()), this, SLOT(sendMessage()));
-    connect(newMessageEdit, SIGNAL(textChanged(QString)), this, SLOT(makeButtonEnabled()));
 
     QNetworkConfigurationManager manager;
 
@@ -54,7 +54,7 @@ void ChatServer::sessionOpened()
 {
     tcpServer = new QTcpServer(this);
 
-    if (!tcpServer)
+    if (!tcpServer->listen())
     {
         QMessageBox::critical(this, "Chat server", tr("Div... I mean, unable to start server: %1").arg(tcpServer->errorString()));
         close();
@@ -83,15 +83,17 @@ void ChatServer::connectClient()
 void ChatServer::sendMessage()
 {
     QByteArray block;
-    QDataStream out(&block, QIODevice::ReadOnly);
+    QDataStream out(&block, QIODevice::WriteOnly);
     out << (quint16)0;
     out << newMessageEdit->text();
+
+    chatText->append("Me: " + newMessageEdit->text());
+    newMessageEdit->clear();
+
     out.device()->seek(0);
     out << (quint16)(block.size() - sizeof(quint16));
     tcpSocket->write(block);
 
-    chatText->append("Me: " + newMessageEdit->text());
-    newMessageEdit->clear();
 }
 
 void ChatServer::disconnected()
@@ -102,7 +104,7 @@ void ChatServer::disconnected()
 
 void ChatServer::makeButtonEnabled()
 {
-    sendButton->setEnabled(tcpSocket && tcpSocket->state() == QAbstractSocket::UnconnectedState && !newMessageEdit->text().isEmpty());
+    sendButton->setEnabled(tcpSocket && tcpSocket->state() == QAbstractSocket::ConnectedState && !newMessageEdit->text().isEmpty());
 }
 
 void ChatServer::incomingData()
