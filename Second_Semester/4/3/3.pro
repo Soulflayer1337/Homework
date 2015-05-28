@@ -4,19 +4,20 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui testlib
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = 3
+TARGET = 4_3
 TEMPLATE = app
-
+CONFIG += c++11
 
 SOURCES += main.cpp\
         calcwindow.cpp \
     calculator.cpp
 
 HEADERS  += calcwindow.h \
-    calculator.h
+    calculator.h \
+    calculatortest.h
 
 FORMS    += calcwindow.ui
