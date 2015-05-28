@@ -63,7 +63,6 @@ void TicTacToeWidget::spotClicked(const int index)
     unsigned int row = index / currentSettings[1];
     unsigned int column = index % currentSettings[1];
 
-    QMessageBox::information(this, QString::number(row), QString::number(column), QMessageBox::Ok);
     if (game->marked(row, column) || game->getWinner() != empty)
         return;
 

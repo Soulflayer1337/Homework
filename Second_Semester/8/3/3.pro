@@ -4,11 +4,11 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui testlib
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = 3
+TARGET = 4_3
 TEMPLATE = app
 
 
@@ -17,7 +17,8 @@ SOURCES += main.cpp\
     tictactoe.cpp
 
 HEADERS  += tictactoewidget.h \
-    tictactoe.h
+    tictactoe.h \
+    tictactoetest.h
 
 FORMS    += tictactoewidget.ui
 
