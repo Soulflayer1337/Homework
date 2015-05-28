@@ -1,5 +1,6 @@
 #pragma once
 #include "stack.h"
+#include <iostream>
 
 class Calculator
 {
@@ -7,7 +8,7 @@ public:
     Calculator();
     ~Calculator();
 
-    void calculate();
+    int calculate(std::istream &stream, int &error);
     void setStack(Stack *stack);
 private:
     Stack *stack;

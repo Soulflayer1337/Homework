@@ -1,5 +1,4 @@
 #include "matrix.h"
-#include <iostream>
 
 Matrix::Matrix(unsigned int _width) : Matrix(_width, _width)
 {
@@ -11,11 +10,11 @@ Matrix::Matrix(unsigned int _width, unsigned int _height) : width(_width), heigh
         matrix[i] = new int[_width];
 }
 
-void Matrix::readMatrix()
+void Matrix::readMatrix(std::istream &stream)
 {
     for (unsigned int i = 0; i < height; i++)
         for (unsigned int j = 0; j < width; j++)
-            std::cin >> matrix[i][j];
+            stream >> matrix[i][j];
 }
 
 int Matrix::element(unsigned int i, unsigned int j)

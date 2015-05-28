@@ -1,4 +1,5 @@
 #pragma once
+#include <iostream>
 
 /**
  * @brief The Matrix class - wrapper class for the matrix
@@ -23,7 +24,7 @@ public:
     /**
      * @brief readMatrix - reads matrix
      */
-    void readMatrix();
+    void readMatrix(std::istream &stream = std::cin);
 
     /**
      * @brief element - returns the value of an element from i row and j column
