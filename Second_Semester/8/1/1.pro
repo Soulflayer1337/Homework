@@ -8,5 +8,6 @@ SOURCES += main.cpp
 CONFIG += c++11
 
 HEADERS += \
-    bag.h \
-    bagtest.h
+    bagtest.h \
+    AVLTree.h \
+    bag.h
