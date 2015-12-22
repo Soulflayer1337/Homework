@@ -1,6 +1,7 @@
 #pragma once
 
-#include <QList>
+#include <QMap>
+#include <QString>
 
 class OperatingSystem;
 class Computer;
@@ -18,5 +19,5 @@ public:
     /// @brief createComputerWithOs creates new instance of Computer with osName-OS. Returns nullptr if OS with such name already exists
     Computer *createComputerWithOs(const QString &osName) const;
 private:
-    QList<OperatingSystem *> OperatingSystems_;
+    QMap<QString, OperatingSystem *> OperatingSystems_;
 };

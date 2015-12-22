@@ -2,6 +2,7 @@
 
 #include "operatingsystem.h"
 #include "computer.h"
+#include "macrodefinition.h"
 
 ComputerFactory::ComputerFactory()
 {
@@ -9,36 +10,35 @@ ComputerFactory::ComputerFactory()
 
 ComputerFactory::~ComputerFactory()
 {
-    while (!OperatingSystems_.isEmpty())
+    QMap<QString, OperatingSystem *>::iterator iterator = OperatingSystems_.begin();
+
+    while (iterator != OperatingSystems_.end())
     {
-        delete OperatingSystems_.takeFirst();
+        safeDelete(iterator.value());
+        iterator++;
     }
 }
 
 bool ComputerFactory::addOperatingSystem(const QString &name, int infectionChance)
 {
-    bool isVacantName = true;
-
-    foreach (OperatingSystem *currentOs, OperatingSystems_)
-    {
-        isVacantName = isVacantName && currentOs->getOsName().compare(name);
-    }
+    bool isVacantName = !OperatingSystems_.contains(name);
 
     if (isVacantName)
     {
-        OperatingSystems_.append(new OperatingSystem(name, 100 - infectionChance));
+        OperatingSystems_.insert(name, new OperatingSystem(name, 100 - infectionChance));
     }
+
     return isVacantName;
 }
 
 Computer *ComputerFactory::createComputerWithOs(const QString &osName) const
 {
     Computer *newComputer = nullptr;
+    QMap<QString, OperatingSystem *>::const_iterator iterator = OperatingSystems_.find(osName);
 
-    foreach (OperatingSystem *currentOs, OperatingSystems_)
+    if (iterator != OperatingSystems_.end())
     {
-        if (!currentOs->getOsName().compare(osName))
-            newComputer = new Computer(currentOs);
+        newComputer = new Computer(iterator.value());
     }
 
     return newComputer;
