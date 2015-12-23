@@ -11,7 +11,9 @@ SOURCES += main.cpp \
     computer.cpp \
     computerfactory.cpp \
     operatingsystem.cpp \
-    network.cpp
+    network.cpp \
+    randomnumbergenerator.cpp \
+    fakenumbergenerator.cpp
 
 HEADERS += \
     computer.h \
@@ -20,5 +22,8 @@ HEADERS += \
     computerfactorytest.h \
     network.h \
     networktest.h \
-    macrodefinition.h
+    macrodefinition.h \
+    inumbergenerator.h \
+    randomnumbergenerator.h \
+    fakenumbergenerator.h
 

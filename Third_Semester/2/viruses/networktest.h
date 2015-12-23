@@ -6,6 +6,7 @@
 #include "computerfactory.h"
 #include "network.h"
 #include "macrodefinition.h"
+#include "fakenumbergenerator.h"
 
 class NetworkTest : public QObject
 {
@@ -256,6 +257,46 @@ private slots:
                 QVERIFY(!computerObserver.at(i)->isInfected());
             }
         }
+    }
+
+    void simulationTest3()
+    {
+        Computer *infectedComputer = factory->createComputerWithOs("CoinOs");
+        infectedComputer->setInfected();
+
+        Computer *firstComputer = factory->createComputerWithOs("CoinOs");
+        FakeNumberGenerator *firstGenerator = new FakeNumberGenerator;
+        delete firstComputer->setNumberGenerator(firstGenerator);
+        firstGenerator->addNumberToQueue(15);
+        firstGenerator->addNumberToQueue(65);
+
+        Computer *secondComputer = factory->createComputerWithOs("CoinOs");
+        FakeNumberGenerator *secondGenerator = new FakeNumberGenerator;
+        delete secondComputer->setNumberGenerator(secondGenerator);
+        secondGenerator->addNumberToQueue(45);
+        secondGenerator->addNumberToQueue(13);
+        secondGenerator->addNumberToQueue(25);
+        secondGenerator->addNumberToQueue(97);
+
+        infectedComputer->addRelative(firstComputer);
+        infectedComputer->addRelative(secondComputer);
+        firstComputer->addRelative(secondComputer);
+
+        network->addComputer(firstComputer);
+        network->addComputer(secondComputer);
+        network->addComputer(infectedComputer);
+        network->simulation();
+
+        QVERIFY(!firstComputer->isInfected());
+        QVERIFY(!secondComputer->isInfected());
+        network->simulation();
+
+        QVERIFY(firstComputer->isInfected());
+        QVERIFY(!secondComputer->isInfected());
+        network->simulation();
+
+        QVERIFY(firstComputer->isInfected());
+        QVERIFY(secondComputer->isInfected());
     }
 
 private:

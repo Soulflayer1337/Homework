@@ -1,6 +1,10 @@
 #include "computer.h"
-#include "operatingsystem.h"
+
 #include <QDebug>
+
+#include "operatingsystem.h"
+#include "randomnumbergenerator.h"
+#include "macrodefinition.h"
 
 Computer::Computer(const Computer *anotherComputer)
     : Computer(anotherComputer->OperatingSystem_, anotherComputer->infected_)
@@ -13,8 +17,15 @@ Computer::Computer(const OperatingSystem *OperatingSystem) :
 }
 
 Computer::Computer(const OperatingSystem *OperatingSystem, bool infected) :
-    OperatingSystem_(OperatingSystem), infected_(infected)
+    OperatingSystem_(OperatingSystem),
+    infected_(infected),
+    numberGenerator_(new RandomNumberGenerator)
 {
+}
+
+Computer::~Computer()
+{
+    safeDelete(numberGenerator_);
 }
 
 void Computer::setInfected(bool infected)
@@ -25,6 +36,19 @@ void Computer::setInfected(bool infected)
 bool Computer::isInfected() const
 {
     return infected_;
+}
+
+INumberGenerator *Computer::setNumberGenerator(INumberGenerator *newNumberGenerator)
+{
+    INumberGenerator *toReturn = nullptr;
+
+    if (newNumberGenerator)
+    {
+        toReturn = numberGenerator_;
+        numberGenerator_ = newNumberGenerator;
+    }
+
+    return toReturn;
 }
 
 void Computer::addRelative(Computer *relative)
@@ -51,7 +75,7 @@ void Computer::tryToInfectRelatives()
 
 void Computer::infect()
 {
-    infected_ |= (qrand() % 101 > OperatingSystem_->getResistance());
+    infected_ |= (numberGenerator_->getNumber() % 101 > OperatingSystem_->getResistance());
 }
 
 
