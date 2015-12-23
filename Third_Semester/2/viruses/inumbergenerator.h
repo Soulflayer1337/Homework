@@ -1,5 +1,6 @@
 #pragma once
 
+/// \brief INumberGenerator - an interface for generators.
 class INumberGenerator
 {
 public:
