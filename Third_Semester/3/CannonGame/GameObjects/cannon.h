@@ -1,18 +1,22 @@
 #pragma once
 
-#include <QObject>
+#include <QGraphicsObject>
 #include <InputManager/inputmanager.h>
 
 class GameClass;
 
-class Cannon : public QObject
+class Cannon : public QGraphicsObject
 {
     Q_OBJECT
 public:
-    explicit Cannon(GameClass *parent);
+    explicit Cannon(QGraphicsItem *parent, GameClass *gameClass);
     ~Cannon();
 
     void update();
+    QRectF boundingRect() const Q_DECL_OVERRIDE;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+               QWidget *widget) Q_DECL_OVERRIDE;
+    QPainterPath shape() const Q_DECL_OVERRIDE;
 
     void setInputManager(InputManager *manager);
     InputManager *getInputManager() const;
@@ -21,10 +25,7 @@ public:
     void setPosition(int xPosition);
     void getPosition(float &xPosition, float &yPosition) const;
 
-    int getAngleOfCannon() const;
-
-signals:
-    void updated();
+    float getAngleOfCannon() const;
 
 private slots:
     void moveRight();
@@ -38,6 +39,7 @@ private slots:
 private:
     GameClass *gameClass_;
     InputManager *inputManager_;
+    QPainterPath path_;
 
     int deltaX_;
     int deltaAngle_;

@@ -16,27 +16,23 @@ SOURCES += main.cpp\
     CannonGameWidget.cpp \
     GameObjects/landscape.cpp \
     gameclass.cpp \
-    GraphicsRepresentation/graphicslandscape.cpp \
-    GraphicsRepresentation/graphicscannon.cpp \
     GameObjects/cannon.cpp \
-    GraphicsRepresentation/graphicsprojectile.cpp \
     GameObjects/Projectiles/heavyprojectile.cpp \
     GameObjects/Projectiles/lightprojectile.cpp \
     GameObjects/Projectiles/projectile.cpp \
     InputManager/inputmanager.cpp \
-    InputManager/keyboardmanager.cpp
+    InputManager/keyboardmanager.cpp \
+    GameObjects/explosion.cpp
 
 HEADERS  += \
     CannonGameWidget.h \
     GameObjects/landscape.h \
     gameclass.h \
     util.h \
-    GraphicsRepresentation/graphicslandscape.h \
-    GraphicsRepresentation/graphicscannon.h \
     GameObjects/cannon.h \
-    GraphicsRepresentation/graphicsprojectile.h \
     GameObjects/Projectiles/heavyprojectile.h \
     GameObjects/Projectiles/lightprojectile.h \
     GameObjects/Projectiles/projectile.h \
     InputManager/inputmanager.h \
-    InputManager/keyboardmanager.h
+    InputManager/keyboardmanager.h \
+    GameObjects/explosion.h

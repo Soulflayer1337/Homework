@@ -9,5 +9,5 @@ public:
     explicit HeavyProjectile(Cannon *parent);
 
     void update() override;
-    void explode() override;
+    Explosion *getExplosion() override;
 };

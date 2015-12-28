@@ -1,6 +1,6 @@
 #include "heavyprojectile.h"
 
-#include "GameObjects/cannon.h"
+#include "GameObjects/explosion.h"
 
 HeavyProjectile::HeavyProjectile(Cannon *parent) :
     Projectile(parent, 5.0f)
@@ -12,12 +12,13 @@ void HeavyProjectile::update()
 {
     xPosition_ += xAcceleration_;
     yPosition_ += yAcceleration_;
-    yAcceleration_ -= 1.0f;
-    emit updated();
+    yAcceleration_ -= 0.3f;
+    setPos(xPosition_, -yPosition_);
 }
 
-void HeavyProjectile::explode()
+Explosion *HeavyProjectile::getExplosion()
 {
     deleteLater();
+    return new Explosion(50, this);
 }
 

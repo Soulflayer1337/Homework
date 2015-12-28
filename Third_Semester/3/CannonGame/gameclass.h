@@ -2,9 +2,13 @@
 
 #include <QObject>
 
+class QGraphicsView;
+class QGraphicsScene;
+
 class Landscape;
 class Cannon;
 class Projectile;
+class Explosion;
 class QTimer;
 
 class GameClass : public QObject
@@ -13,7 +17,7 @@ class GameClass : public QObject
 public:
     explicit GameClass(QObject *parent = 0);
 
-    void startGame();
+    void startGame(QGraphicsView *view);
     void generateLandscape(int width, int height);
 
     ///////////////////////////////////////////
@@ -21,9 +25,6 @@ public:
     ///////////////////////////////////////////
     void setLandscape(Landscape *landscape);
     const Landscape *getLandscape() const;
-    const Projectile *getProjectile() const;
-    void setFirstCannon(Cannon *cannon);
-    void setSecondCannon(Cannon *cannon);
     void setProjectile(Projectile *projectile);
 
 signals:
@@ -31,12 +32,16 @@ signals:
 
 private slots:
     void update();
+    void explosionOver();
 
 private:
+    QGraphicsScene *scene_;
+
     QTimer *timer_;
 
     Landscape *landscape_;
     Cannon *firstCannon_;
     Cannon *secondCannon_;
     Projectile *projectile_;
+    Explosion *explosion_;
 };

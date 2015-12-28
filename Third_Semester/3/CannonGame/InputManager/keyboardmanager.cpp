@@ -42,9 +42,9 @@ bool KeyboardManager::eventFilter(QObject *object, QEvent *event)
                 pressed_ = Qt::Key_Down;
                 emit angleDownPressed();
             }
-            else if (keyEvent->key() == Qt::Key_Enter)
+            else if (keyEvent->key() == Qt::Key_Space)
             {
-                pressed_ = Qt::Key_Enter;
+                pressed_ = Qt::Key_Space;
                 emit shootPressed();
             }
             else if (keyEvent->key() == Qt::Key_Q)

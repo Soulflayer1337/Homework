@@ -1,13 +1,14 @@
 #include "projectile.h"
 
+#include <QPainter>
 #include <QtMath>
 
 #include "gameclass.h"
 #include "GameObjects/cannon.h"
+#include "GameObjects/landscape.h"
 
 Projectile::Projectile(Cannon *parent, float baseAcceleration) :
-    QObject(parent),
-    gameClass_(static_cast<GameClass *>(parent->parent())),
+    QGraphicsObject(parent->parentItem()),
     radius_(1),
     xPosition_(0.0f),
     yPosition_(0.0f),
@@ -19,10 +20,34 @@ Projectile::Projectile(Cannon *parent, float baseAcceleration) :
     yPosition_ += 10 + yAcceleration_ * 15;
     xAcceleration_ *= baseAcceleration;
     yAcceleration_ *= baseAcceleration;
-
-    gameClass_->setProjectile(this);
 }
 
+//////////////////////////////////////////////////////////////////////////////
+//                            Drawing section
+//////////////////////////////////////////////////////////////////////////////
+QRectF Projectile::boundingRect() const
+{
+    return (QRectF(-radius_, -radius_, 2 * radius_, 2 * radius_));
+}
+
+void Projectile::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                               QWidget *widget)
+{
+    painter->setBrush(QColor(45, 80, 5));
+    painter->setPen(QPen(Qt::black, 1));
+    painter->drawEllipse(boundingRect());
+}
+
+QPainterPath Projectile::shape() const
+{
+    QPainterPath path;
+    path.addEllipse(boundingRect());
+    return path;
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//                        Getters/Setters section
+//////////////////////////////////////////////////////////////////////////////
 int Projectile::getRadius() const
 {
     return radius_;

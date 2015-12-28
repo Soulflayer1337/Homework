@@ -1,29 +1,29 @@
 #pragma once
 
-#include <QObject>
+#include <QGraphicsObject>
 
 class Cannon;
-class GameClass;
+class Explosion;
 
-class Projectile : public QObject
+class Projectile : public QGraphicsObject
 {
     Q_OBJECT
 public:
     explicit Projectile(Cannon *parent, float baseAcceleration = 0.0f);
 
+    QRectF boundingRect() const Q_DECL_OVERRIDE;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+               QWidget *widget) Q_DECL_OVERRIDE;
+    QPainterPath shape() const Q_DECL_OVERRIDE;
+
     virtual void update() = 0;
-    virtual void explode() = 0;
+    virtual Explosion *getExplosion() = 0;
 
     int getRadius() const;
     void getPosition(int &xPosition, int &yPosition) const;
     void getAcceleration(float &xAcceleration, float &yAcceleration) const;
 
-signals:
-    void updated();
-
 protected:
-    GameClass *gameClass_;
-
     int radius_;
 
     float xPosition_;

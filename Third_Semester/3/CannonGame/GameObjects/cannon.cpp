@@ -1,14 +1,17 @@
 #include "cannon.h"
 
+#include <QPainter>
+#include <QtMath>
+
 #include "landscape.h"
 #include "gameclass.h"
 #include "GameObjects/Projectiles/projectile.h"
 #include "GameObjects/Projectiles/heavyProjectile.h"
 #include "GameObjects/Projectiles/lightProjectile.h"
 
-Cannon::Cannon(GameClass *parent) :
-    QObject(parent),
-    gameClass_(parent),
+Cannon::Cannon(QGraphicsItem *parent, GameClass *gameClass) :
+    QGraphicsObject(parent),
+    gameClass_(gameClass),
     inputManager_(nullptr),
 
     deltaX_(0),
@@ -20,6 +23,15 @@ Cannon::Cannon(GameClass *parent) :
     yPosition_(0),
     angleOfCannon_(45)
 {
+    path_.moveTo(-17, 0);
+    path_.lineTo(-20, -10);
+    path_.lineTo(-13, -10);
+    path_.lineTo(-7, -15);
+    path_.lineTo(7, -15);
+    path_.lineTo(13, -10);
+    path_.lineTo(20, -10);
+    path_.lineTo(17, 0);
+    path_.closeSubpath();
 }
 
 Cannon::~Cannon()
@@ -59,7 +71,31 @@ void Cannon::update()
     {
         angleOfCannon_ = 80;
     }
-    emit updated();
+    setPos(xPosition_, -yPosition_);
+}
+
+//////////////////////////////////////////////////////////////////////////////
+//                            Drawing section
+//////////////////////////////////////////////////////////////////////////////
+QRectF Cannon::boundingRect() const
+{
+    return (QRectF(-5, -15, 10, 5));
+}
+
+void Cannon::paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+                           QWidget *widget)
+{
+    float angle = getAngleOfCannon();
+    painter->setPen(QPen(QBrush(Qt::black), 1));
+    painter->setBrush(QColor(Qt::green).darker());
+    painter->drawLine(0, -10, qCos(angle) * 15, -10 - qSin(angle) * 15);
+
+    painter->drawPath(path_);
+}
+
+QPainterPath Cannon::shape() const
+{
+    return path_;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -101,6 +137,7 @@ void Cannon::setPosition(int xPosition)
 {
     xPosition_ = xPosition;
     yPosition_ = gameClass_->getLandscape()->getHeightAt(xPosition_);
+    setPos(xPosition_, -yPosition_);
 }
 
 void Cannon::getPosition(float &xPosition, float &yPosition) const
@@ -109,9 +146,9 @@ void Cannon::getPosition(float &xPosition, float &yPosition) const
     yPosition = yPosition_;
 }
 
-int Cannon::getAngleOfCannon() const
+float Cannon::getAngleOfCannon() const
 {
-    return (isFacingRight() ? angleOfCannon_ : 180 - angleOfCannon_);
+    return qDegreesToRadians(float(isFacingRight() ? angleOfCannon_ : 180 - angleOfCannon_));
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -150,7 +187,6 @@ void Cannon::changeProjectilesType()
 void Cannon::shoot()
 {
     stopAction();
-
     Projectile *projectile = nullptr;
 
     if (isLightProjectile_)
@@ -161,6 +197,8 @@ void Cannon::shoot()
     {
         projectile = new HeavyProjectile(this);
     }
+
+    gameClass_->setProjectile(projectile);
 }
 
 void Cannon::stopAction()

@@ -1,15 +1,20 @@
 #pragma once
 
-#include <QObject>
+#include <QGraphicsObject>
 #include <QVector>
 
 class GameClass;
 
-class Landscape : public QObject
+class Landscape : public QGraphicsObject
 {
     Q_OBJECT
 public:
     explicit Landscape(GameClass *parent);
+
+    QRectF boundingRect() const Q_DECL_OVERRIDE;
+    void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
+               QWidget *widget) Q_DECL_OVERRIDE;
+    QPainterPath shape() const Q_DECL_OVERRIDE;
 
     void setHeight(int height);
 
@@ -21,8 +26,11 @@ public:
 
     int getWidth() const;
     int getHeight() const;
+
 private:
     GameClass *gameClass_;
+
+    QPainterPath path_;
     QVector<int> field_;
     int height_;
 };
