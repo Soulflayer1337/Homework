@@ -10,7 +10,6 @@ class Cannon;
  */
 class NetworkInputManager : public InputManager
 {
-    Q_OBJECT
 public:
     explicit NetworkInputManager(Network *parent, Cannon *subject);
 

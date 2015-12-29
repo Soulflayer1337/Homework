@@ -9,7 +9,6 @@ class QGraphicsView;
  */
 class KeyboardManager : public InputManager
 {
-    Q_OBJECT
 public:
     explicit KeyboardManager(QObject *parent);
 
