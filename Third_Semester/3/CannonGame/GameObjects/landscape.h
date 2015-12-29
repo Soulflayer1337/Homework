@@ -9,7 +9,7 @@ class Landscape : public QGraphicsObject
 {
     Q_OBJECT
 public:
-    explicit Landscape(GameClass *parent);
+    explicit Landscape();
 
     QRectF boundingRect() const Q_DECL_OVERRIDE;
     void paint(QPainter *painter, const QStyleOptionGraphicsItem *option,
@@ -28,8 +28,6 @@ public:
     int getHeight() const;
 
 private:
-    GameClass *gameClass_;
-
     QPainterPath path_;
     QVector<int> field_;
     int height_;

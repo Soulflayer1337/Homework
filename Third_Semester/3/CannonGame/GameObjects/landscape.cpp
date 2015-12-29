@@ -4,9 +4,8 @@
 
 #include "gameclass.h"
 
-Landscape::Landscape(GameClass *parent) :
+Landscape::Landscape() :
     QGraphicsObject(nullptr),
-    gameClass_(parent),
     height_(0)
 {
 }

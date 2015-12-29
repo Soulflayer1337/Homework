@@ -24,8 +24,10 @@ public:
     bool isFacingRight() const;
     void setPosition(int xPosition);
     void getPosition(float &xPosition, float &yPosition) const;
+    void setAngleOfCannon(int angle);
 
     float getAngleOfCannon() const;
+    int getAngleOfCannonDegrees() const;
 
 private slots:
     void moveRight();

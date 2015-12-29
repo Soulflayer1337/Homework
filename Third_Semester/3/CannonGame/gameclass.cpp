@@ -14,11 +14,18 @@
 #include "InputManager/keyboardmanager.h"
 #include "util.h"
 
+#include "Network/client.h"
+#include "Network/server.h"
+
 GameClass::GameClass(QObject *parent) :
     QObject(parent),
     scene_(nullptr),
 
+    isFirstTurn_(true),
+
     timer_(nullptr),
+    loop_(new QEventLoop(this)),
+
     landscape_(nullptr),
     firstCannon_(nullptr),
     secondCannon_(nullptr),
@@ -31,20 +38,57 @@ GameClass::GameClass(QObject *parent) :
     qsrand(QDateTime::currentMSecsSinceEpoch());
     timer_ = new QTimer(this);
     connect(timer_, SIGNAL(timeout()), this, SLOT(update()));
+    connect(this, SIGNAL(gameOver(QString)), this, SLOT(onGameOver()));
 }
 
-void GameClass::startGame(QGraphicsView *view)
+void GameClass::startGame(QGraphicsView *view, Network *network)
 {
+    network_ = network;
     view->setScene(scene_);
     connect(this, SIGNAL(updated()), view->viewport(), SLOT(update()));
     KeyboardManager *keyboardManager = new KeyboardManager(view);
 
-    generateLandscape(798, 598);
+    if (dynamic_cast<Server *>(network))
+    {
+        Server *server = static_cast<Server *>(network);
+        generateLandscape(798, 598);
+        server->sendLandscape(landscape_);
+
+        firstCannon_ = new Cannon(landscape_, this);
+        secondCannon_ = new Cannon(landscape_, this);
+        firstCannon_->setPosition(50);
+        secondCannon_->setPosition(landscape_->getWidth() - 50);
+        secondCannon_->setFacingRight(false);
+    }
+    else
+    {
+        Client *client = static_cast<Client *>(network);
+        connect(client, SIGNAL(gotLandscape(Landscape *)),
+                this, SLOT(setLandscape(Landscape*)));
+        loop_->exec();
+
+        firstCannon_ = new Cannon(landscape_, this);
+        secondCannon_ = new Cannon(landscape_, this);
+        secondCannon_->setPosition(50);
+        firstCannon_->setPosition(landscape_->getWidth() - 50);
+        firstCannon_->setFacingRight(false);
+
+        isFirstTurn_ = false;
+    }
     scene_->addItem(landscape_);
 
-    firstCannon_ = new Cannon(landscape_, this);
-    firstCannon_->setPosition(50);
     firstCannon_->setInputManager(keyboardManager);
+    network->initInputManager(secondCannon_);
+    network_->observeInputManager(firstCannon_);
+
+    if (isFirstTurn_)
+    {
+        secondCannon_->getInputManager()->blockSignals(true);
+    }
+    else
+    {
+        firstCannon_->getInputManager()->blockSignals(true);
+    }
 
     timer_->start(17);
 }
@@ -106,7 +150,7 @@ void GameClass::generateLandscape(int width, int height)
 
     if (!landscape_)
     {
-        landscape_ = new Landscape(this);
+        landscape_ = new Landscape;
     }
     landscape_->setField(points);
     landscape_->setHeight(height);
@@ -117,7 +161,11 @@ void GameClass::generateLandscape(int width, int height)
 //////////////////////////////////////////////////////////////////////////////
 void GameClass::setLandscape(Landscape *landscape)
 {
+    Client *client = static_cast<Client *>(network_);
+    disconnect(client, SIGNAL(gotLandscape(Landscape*)),
+               this, SLOT(setLandscape(Landscape*)));
     landscape_ = landscape;
+    loop_->exit();
 }
 
 const Landscape *GameClass::getLandscape() const
@@ -127,8 +175,10 @@ const Landscape *GameClass::getLandscape() const
 
 void GameClass::setProjectile(Projectile *projectile)
 {
-    firstCannon_->getInputManager()->blockSignals(true);
     projectile_ = projectile;
+    firstCannon_->getInputManager()->blockSignals(true);
+    secondCannon_->getInputManager()->blockSignals(true);
+    isFirstTurn_ ^= true;
 }
 
 //////////////////////////////////////////////////////////////////////////////
@@ -137,6 +187,7 @@ void GameClass::setProjectile(Projectile *projectile)
 void GameClass::update()
 {
     firstCannon_->update();
+    secondCannon_->update();
 
     if (projectile_)
     {
@@ -151,7 +202,14 @@ void GameClass::update()
         if (xPosition < 0 || xPosition > landscape_->getWidth())
         {
             qSafeDelete(projectile_);
-            firstCannon_->getInputManager()->blockSignals(false);
+            if (isFirstTurn_)
+            {
+                firstCannon_->getInputManager()->blockSignals(false);
+            }
+            else
+            {
+                secondCannon_->getInputManager()->blockSignals(false);
+            }
         }
         else if (!projectile_->collidingItems().isEmpty())
         {
@@ -162,6 +220,34 @@ void GameClass::update()
     }
     else if (explosion_)
     {
+        int gameOverDetector = 0;
+        if (explosion_->collidesWithItem(firstCannon_))
+        {
+            gameOverDetector |= 1;
+        }
+        else if (explosion_->collidesWithItem(secondCannon_))
+        {
+            gameOverDetector |= 2;
+        }
+
+        if (gameOverDetector)
+        {
+            QString gameOverText;
+            if (gameOverDetector == 1)
+            {
+                gameOverText = "Lose!";
+            }
+            else if (gameOverDetector == 2)
+            {
+                gameOverText = "Win!";
+            }
+            else
+            {
+                gameOverText = "Draw!";
+            }
+            emit gameOver(gameOverText);
+        }
+
         explosion_->update();
     }
 
@@ -171,5 +257,18 @@ void GameClass::update()
 void GameClass::explosionOver()
 {
     qSafeDelete(explosion_);
-    firstCannon_->getInputManager()->blockSignals(false);
+
+    if (isFirstTurn_)
+    {
+        firstCannon_->getInputManager()->blockSignals(false);
+    }
+    else
+    {
+        secondCannon_->getInputManager()->blockSignals(false);
+    }
+}
+
+void GameClass::onGameOver()
+{
+    deleteLater();
 }

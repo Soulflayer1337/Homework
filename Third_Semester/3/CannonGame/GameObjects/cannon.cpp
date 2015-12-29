@@ -146,9 +146,19 @@ void Cannon::getPosition(float &xPosition, float &yPosition) const
     yPosition = yPosition_;
 }
 
+void Cannon::setAngleOfCannon(int angle)
+{
+    angleOfCannon_ = angle;
+}
+
 float Cannon::getAngleOfCannon() const
 {
     return qDegreesToRadians(float(isFacingRight() ? angleOfCannon_ : 180 - angleOfCannon_));
+}
+
+int Cannon::getAngleOfCannonDegrees() const
+{
+    return angleOfCannon_;
 }
 
 //////////////////////////////////////////////////////////////////////////////

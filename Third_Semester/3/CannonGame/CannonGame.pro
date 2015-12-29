@@ -4,7 +4,7 @@
 #
 #-------------------------------------------------
 
-QT       += core gui
+QT       += core gui network
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -13,7 +13,6 @@ TEMPLATE = app
 CONFIG += c++11
 
 SOURCES += main.cpp\
-    CannonGameWidget.cpp \
     GameObjects/landscape.cpp \
     gameclass.cpp \
     GameObjects/cannon.cpp \
@@ -22,10 +21,16 @@ SOURCES += main.cpp\
     GameObjects/Projectiles/projectile.cpp \
     InputManager/inputmanager.cpp \
     InputManager/keyboardmanager.cpp \
-    GameObjects/explosion.cpp
+    GameObjects/explosion.cpp \
+    CannonGameMainWindow.cpp \
+    Network/network.cpp \
+    Network/server.cpp \
+    Network/client.cpp \
+    connectserverdialog.cpp \
+    Network/inputobserver.cpp \
+    InputManager/networkinputmanager.cpp
 
 HEADERS  += \
-    CannonGameWidget.h \
     GameObjects/landscape.h \
     gameclass.h \
     util.h \
@@ -35,4 +40,11 @@ HEADERS  += \
     GameObjects/Projectiles/projectile.h \
     InputManager/inputmanager.h \
     InputManager/keyboardmanager.h \
-    GameObjects/explosion.h
+    GameObjects/explosion.h \
+    CannonGameMainWindow.h \
+    Network/network.h \
+    Network/server.h \
+    Network/client.h \
+    connectserverdialog.h \
+    Network/inputobserver.h \
+    InputManager/networkinputmanager.h
