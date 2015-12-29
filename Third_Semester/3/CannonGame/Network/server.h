@@ -5,6 +5,9 @@
 class QTcpServer;
 class Landscape;
 
+/**
+ * @brief The Server class is a representation of the Server
+ */
 class Server : public Network
 {
     Q_OBJECT

@@ -4,8 +4,12 @@
 
 class QGraphicsView;
 
+/**
+ * \brief The KeyboardManager class handles keyboard input.
+ */
 class KeyboardManager : public InputManager
 {
+    Q_OBJECT
 public:
     explicit KeyboardManager(QObject *parent);
 

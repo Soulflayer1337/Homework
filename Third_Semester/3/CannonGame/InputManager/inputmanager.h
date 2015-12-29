@@ -2,6 +2,9 @@
 
 #include <QObject>
 
+/**
+ * \brief The InputManager class is used by the Cannon class to get input.
+ */
 class InputManager : public QObject
 {
     Q_OBJECT

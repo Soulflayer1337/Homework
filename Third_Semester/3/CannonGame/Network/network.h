@@ -8,13 +8,18 @@ class NetworkInputManager;
 class QTcpSocket;
 class QNetworkSession;
 
+/**
+ * \brief The Network class is a base class for the Client and Server
+ */
 class Network : public QObject
 {
     Q_OBJECT
 public:
     explicit Network(QObject *parent = 0);
 
+    /// \brief sets the InputObserver for a subject and its input
     void observeInputManager(Cannon *subject);
+    /// \brief initalize NetworkInputManager instance that is connected with a subject
     void initInputManager(Cannon *subject);
 
 signals:

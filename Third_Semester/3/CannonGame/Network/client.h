@@ -4,6 +4,9 @@
 
 class Landscape;
 
+/**
+ * \brief The Client class represents the Client
+ */
 class Client : public Network
 {
     Q_OBJECT
@@ -13,6 +16,7 @@ public:
     void connectToServer(int port);
 
 signals:
+    /// \brief emitted when the Landscape received by the network.
     void gotLandscape(Landscape *landscape);
 
 protected:
