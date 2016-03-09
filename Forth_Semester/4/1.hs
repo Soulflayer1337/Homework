@@ -9,16 +9,7 @@ instance Foldable Tree where
         foldr func (func value (foldr func val rightTree)) leftTree
 
 treeSearch :: (a -> Bool) -> Tree a -> Maybe a
-treeSearch _ Nil = Nothing
-treeSearch cond (Leaf val) = if (cond val)
-                             then Just val
-                             else Nothing
-treeSearch cond (Branch leftTree val rightTree) = let 
-                leftResult      = treeSearch cond leftTree
-                rightResult     = treeSearch cond rightTree
-                currentResult   = treeSearch cond (Leaf val)
-                compare (Just a) _  = Just a
-                compare _ (Just a)  = Just a
-                compare _ _         = Nothing
-                in compare (compare leftResult currentResult) rightResult
-
+treeSearch cond tree = let 
+    func x y | cond x    = Just x
+             | otherwise = y
+    in foldr func Nothing tree
