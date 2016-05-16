@@ -25,7 +25,7 @@ instance Ord Monomial where
 instance DiffObject Monomial where
     diff (Monomial 0 _) = (Monomial 0 0)
     diff (Monomial _ 0) = (Monomial 0 0)
-    diff (Monomial fac deg) = Monomial ((fac /) $ fromIntegral deg) (deg - 1)
+    diff (Monomial fac deg) = Monomial ((fac *) $ fromIntegral deg) (deg - 1)
 
 data Polynomial = Polynomial [Monomial]
 instance DiffObject Polynomial where
